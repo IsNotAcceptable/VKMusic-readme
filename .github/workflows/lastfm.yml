@@ -1,8 +1,8 @@
-name: Update Last.fm Track
+name: Last.fm SVG Updater
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/5 * * * *"  # Каждые 5 минут
   workflow_dispatch:
 
 jobs:
@@ -16,17 +16,17 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      
-      - name: Update track info
+          
+      - name: Generate SVG
         run: python scripts/update_track.py
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
-      
+          
       - name: Commit changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add README.md
-          git commit -m "🔄 Update Last.fm track" || echo "No changes to commit"
+          git add docs/lastfm-widget.svg
+          git commit -m "🔄 Обновлен Last.fm SVG" || echo "Нет изменений"
           git push
