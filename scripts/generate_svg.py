@@ -6,39 +6,56 @@ LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 LASTFM_USERNAME = os.getenv("LASTFM_USERNAME")
 OUTPUT_PATH = "assets/lastfm_widget.svg"
 
-def get_track():
+def get_track_info():
+    """Получаем данные трека с улучшенной обработкой ошибок"""
     url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1"
+    
     try:
-        data = requests.get(url).json()
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()  # Проверяем HTTP-ошибки
+        data = response.json()
+        
+        # Проверяем наличие треков
+        if "recenttracks" not in data or not data["recenttracks"]["track"]:
+            return None
+            
         track = data["recenttracks"]["track"][0]
         return {
-            "name": track["name"],
-            "artist": track["artist"]["#text"],
-            "now": "@attr" in track and "nowplaying" in track["@attr"]
+            "name": track.get("name", "Неизвестный трек"),
+            "artist": track["artist"].get("#text", "Неизвестный исполнитель"),
+            "now_playing": track.get("@attr", {}).get("nowplaying", "false") == "true"
         }
-    except:
-        return None
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка запроса: {e}")
+    except Exception as e:
+        print(f"Неожиданная ошибка: {e}")
+    
+    return None
 
-def create_svg(track):
-    return f'''<svg width="300" height="80" xmlns="http://www.w3.org/2000/svg">
+def create_svg(track_data):
+    """Генерируем SVG с запасными данными"""
+    track = track_data or {
+        "name": "Нет данных о треке",
+        "artist": "Проверьте настройки Last.fm",
+        "now_playing": False
+    }
+    
+    return f'''<svg width="350" height="100" xmlns="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="#9400D3" rx="5"/>
-    <text x="20" y="30" font-family="Arial" font-size="14" fill="white">
-        {track["name"][:20]}{"..." if len(track["name"]) > 20 else ""}
+    <text x="20" y="35" font-family="Arial" font-size="16" fill="white">
+        {track["name"][:25]}{"..." if len(track["name"]) > 25 else ""}
     </text>
-    <text x="20" y="50" font-family="Arial" font-size="12" fill="#EEE">
-        {track["artist"][:20]}{"..." if len(track["artist"]) > 20 else ""}
+    <text x="20" y="60" font-family="Arial" font-size="14" fill="#EEE">
+        {track["artist"][:25]}{"..." if len(track["artist"]) > 25 else ""}
     </text>
-    <text x="20" y="70" font-family="Arial" font-size="10" fill="#DDD">
-        {"▶ Сейчас играет" if track["now"] else "⏱ " + datetime.now().strftime("%H:%M")}
+    <text x="20" y="85" font-family="Arial" font-size="12" fill="#DDD">
+        {"▶ Сейчас играет" if track["now_playing"] else "⏱ " + datetime.now().strftime("%H:%M")}
     </text>
 </svg>'''
 
 if __name__ == "__main__":
-    track = get_track() or {
-        "name": "Не удалось загрузить",
-        "artist": "Проверьте настройки",
-        "now": False
-    }
     os.makedirs("assets", exist_ok=True)
-    with open(OUTPUT_PATH, "w") as f:
+    track = get_track_info()
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(create_svg(track))
