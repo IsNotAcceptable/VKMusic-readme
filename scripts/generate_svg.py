@@ -29,12 +29,25 @@ def get_track_info():
         return None
 
 def create_svg(track):
-    """Генерируем SVG"""
+    """Генерируем SVG с обложкой и статусом"""
     return f'''<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="#9400D3" rx="6"/>
     <image href="{track['cover']}" x="20" y="20" width="110" height="110"/>
-    <text x="150" y="40" font-family="Arial" fill="white">{track["name"]}</text>
-    <text x="150" y="70" font-family="Arial" fill="#EEE">{track["artist"]}</text>
+    
+    <!-- Название трека -->
+    <text x="150" y="40" font-family="Arial" font-size="16" fill="white">
+        {track["name"]}
+    </text>
+    
+    <!-- Исполнитель -->
+    <text x="150" y="65" font-family="Arial" font-size="14" fill="#EEE">
+        {track["artist"]}
+    </text>
+    
+    <!-- Статус воспроизведения -->
+    <text x="150" y="90" font-family="Arial" font-size="12" fill="#DDD">
+        {"▶ Сейчас играет" if track["now_playing"] else "⏱ Недавно играло"}
+    </text>
 </svg>'''
 
 if __name__ == "__main__":
