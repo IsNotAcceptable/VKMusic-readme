@@ -14,6 +14,7 @@ def download_image(url):
         response = requests.get(url, timeout=10)
         if response.status_code == 200:
             return f"data:image/jpeg;base64,{base64.b64encode(response.content).decode('utf-8')}"
+        return None
     except Exception:
         return None
 
@@ -28,8 +29,9 @@ def get_track_info():
         # Получаем URL обложки максимального размера
         cover_url = next(
             (img["#text"] for img in reversed(track["image"]) 
-            if img.get("#text") and not "placeholder" in img["#text"].lower()
-        , None)
+            if img.get("#text") and "placeholder" not in img["#text"].lower()),
+            None
+        )
         
         # Загружаем и конвертируем обложку
         cover_data = download_image(cover_url) if cover_url else None
