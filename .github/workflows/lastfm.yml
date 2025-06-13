@@ -1,42 +1,36 @@
-name: Last.fm Cover Test
+name: Last.fm Updater
 
 on:
-  push:
-    branches: [cover-test]  # Важно: указываем конкретную ветку
   schedule:
-    - cron: "*/5 * * * *"  # Автообновление каждые 5 минут
+    - cron: "*/5 * * * *"
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: cover-test  # Явно указываем ветку
-        
-      - name: Force update
-        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
       
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
           
-      - name: Generate widget
+      - name: Install dependencies
         run: |
-          python scripts/generate_svg.py ${{ env.TIMESTAMP }}
-          mv assets/lastfm_widget.svg "assets/lastfm_widget_${{ env.TIMESTAMP }}.svg"
+          python -m pip install --upgrade pip
+          pip install requests
+          
+      - name: Generate widget
+        run: python scripts/generate_svg.py ${{ github.run_id }}
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
           
-      - name: Update README
+      - name: Commit changes
         run: |
-          sed -i "s|lastfm_widget_.*svg|lastfm_widget_${{ env.TIMESTAMP }}.svg|g" README.md
-          git add README.md assets/
-          git commit -m "🔄 Автообновление [${{ env.TIMESTAMP }}]"
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add assets/
+          git commit -m "🔄 Update widget [${{ github.run_id }}]"
           git push
