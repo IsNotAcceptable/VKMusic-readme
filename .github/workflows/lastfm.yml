@@ -1,4 +1,4 @@
-name: Last.fm Widget Update
+name: Last.fm Widget Updater
 
 on:
   schedule:
@@ -23,10 +23,7 @@ jobs:
         run: pip install requests
           
       - name: Generate widget
-        run: |
-          python scripts/generate_svg.py
-          echo "=== SVG Content ==="
-          cat assets/lastfm_widget.svg
+        run: python scripts/generate_svg.py
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
@@ -36,5 +33,5 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add assets/lastfm_widget.svg
-          git commit -m "🔄 Обновление виджета [skip ci]" || echo "Нет изменений"
+          git commit -m "🔄 Авто-обновление виджета [skip ci]" || echo "Нет изменений"
           git push
