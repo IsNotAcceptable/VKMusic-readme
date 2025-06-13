@@ -11,18 +11,15 @@
     </defs>
 
     <rect width="100%" height="100%" fill="url(#bg)" rx="6"/>
-
-    <!-- Обложка -->
-    <image href="https://lastfm.freetls.fastly.net/i/u/300x300/dd45b0438a315aed98b5830aa2fc43c5.jpg" x="10" y="10" width="100" height="100" filter="url(#shadow)" preserveAspectRatio="xMidYMid meet"/>
-
-    <!-- Текст -->
+    <rect x="10" y="10" width="100" height="100" fill="#6A0099" rx="4"/>
+    <text x="60" y="60" text-anchor="middle" font-family="Arial" font-size="12" fill="white">No cover</text>
     <text x="125" y="35" font-family="Arial" font-size="16" font-weight="600" fill="white">
-        Let It Happen
+        Трек не найден
     </text>
     <text x="125" y="60" font-family="Arial" font-size="14" fill="#EEE">
-        Tame Impala
+        Проверьте настройки
     </text>
     <text x="125" y="85" font-family="Arial" font-size="12" fill="#DDD">
-        ▶ Сейчас играет
+        Ошибка подключения
     </text>
 </svg>
