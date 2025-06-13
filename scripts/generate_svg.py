@@ -33,7 +33,7 @@ def generate_svg(track_data):
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg width="350" height="100" viewBox="0 0 350 100" xmlns="http://www.w3.org/2000/svg">
     <style>
-        .background {{ fill: #1DB954; border-radius: 5px; }}
+        .background {{ fill: #9400D3; border-radius: 5px; }}
         .text {{ font-family: Arial, sans-serif; fill: white; }}
         .track {{ font-size: 16px; font-weight: bold; }}
         .artist {{ font-size: 14px; }}
