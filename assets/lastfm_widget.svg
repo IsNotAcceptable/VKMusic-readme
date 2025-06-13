@@ -1,19 +1,21 @@
-<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100%" height="100%" fill="#9400D3" rx="6"/>
-    <image href="https://lastfm.freetls.fastly.net/i/u/300x300/35fdd21456714d50a1cb05e6287913e3.jpg" x="20" y="20" width="110" height="110"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="450" height="150" viewBox="0 0 450 150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <rect width="100%" height="100%" fill="#9400D3" rx="8"/>
     
-    <!-- Название трека -->
-    <text x="150" y="40" font-family="Arial" font-size="16" fill="white">
+    <defs>
+        <clipPath id="coverClip">
+            <rect x="20" y="20" width="110" height="110" rx="8"/>
+        </clipPath>
+    </defs>
+    <image href="https://lastfm.freetls.fastly.net/i/u/300x300/35fdd21456714d50a1cb05e6287913e3.jpg" x="20" y="20" width="110" height="110" 
+           clip-path="url(#coverClip)" preserveAspectRatio="xMidYMid cover"/>
+    <text x="150" y="40" font-family="Arial" font-size="18" font-weight="bold" fill="white">
         Mary on a Cross
     </text>
-    
-    <!-- Исполнитель -->
-    <text x="150" y="65" font-family="Arial" font-size="14" fill="#EEE">
+    <text x="150" y="70" font-family="Arial" font-size="16" fill="#EEE">
         Ghost
     </text>
-    
-    <!-- Статус воспроизведения -->
-    <text x="150" y="90" font-family="Arial" font-size="12" fill="#DDD">
+    <text x="150" y="100" font-family="Arial" font-size="14" fill="#DDD">
         ▶ Сейчас играет
     </text>
 </svg>
