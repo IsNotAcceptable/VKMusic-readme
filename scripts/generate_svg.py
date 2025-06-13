@@ -1,90 +1,44 @@
 import os
 import requests
 from datetime import datetime
-from urllib.parse import quote
 
-# Конфигурация
 LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 LASTFM_USERNAME = os.getenv("LASTFM_USERNAME")
-OUTPUT_PATH = os.path.join(os.path.dirname(__file__), '../assets/lastfm_widget.svg')
+OUTPUT_PATH = "assets/lastfm_widget.svg"
 
-def get_track_info():
-    """Получаем данные трека с обложкой"""
-    url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1&extended=1"
+def get_track():
+    url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1"
     try:
-        response = requests.get(url, timeout=10)
-        data = response.json()
+        data = requests.get(url).json()
         track = data["recenttracks"]["track"][0]
-        
-        # Получаем URL обложки максимального размера
-        cover_url = None
-        if track.get("image"):
-            # Ищем изображение с тегом "extralarge" или "large"
-            for img in track["image"]:
-                if img["size"] == "extralarge":
-                    cover_url = img["#text"]
-                    break
-            if not cover_url:
-                cover_url = track["image"][-1]["#text"]  # Берем последнее доступное
-        
         return {
-            "track": track["name"][:25] + ("..." if len(track["name"]) > 25 else ""),
-            "artist": track["artist"]["#text"][:25] + ("..." if len(track["artist"]["#text"]) > 25 else ""),
-            "status": "▶ Сейчас играет" if "@attr" in track and track["@attr"]["nowplaying"] == "true" else f"⏱ {datetime.now().strftime('%H:%M')}",
-            "cover": cover_url if cover_url and not cover_url.endswith('/placeholder.png') else None
+            "name": track["name"],
+            "artist": track["artist"]["#text"],
+            "now": "@attr" in track and "nowplaying" in track["@attr"]
         }
-    except Exception as e:
-        print(f"Error: {e}")
+    except:
         return None
 
-def generate_svg(track_data):
-    """Генерируем SVG с обложкой"""
-    svg_content = f'''<?xml version="1.0" encoding="UTF-8"?>
-<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <defs>
-        <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-            <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#00000080"/>
-        </filter>
-        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#9400D3"/>
-            <stop offset="100%" stop-color="#7E00B5"/>
-        </linearGradient>
-    </defs>
-
-    <rect width="100%" height="100%" fill="url(#bg)" rx="6"/>'''
-
-    # Добавляем обложку или заглушку
-    if track_data["cover"]:
-        svg_content += f'''
-    <image href="{track_data["cover"]}" x="10" y="10" width="100" height="100" filter="url(#shadow)" preserveAspectRatio="xMidYMid meet"/>'''
-    else:
-        svg_content += '''
-    <rect x="10" y="10" width="100" height="100" fill="#6A0099" rx="4"/>
-    <text x="60" y="60" text-anchor="middle" font-family="Arial" font-size="12" fill="white">No cover</text>'''
-
-    # Добавляем текст
-    svg_content += f'''
-    <text x="125" y="35" font-family="Arial" font-size="16" font-weight="600" fill="white">
-        {track_data["track"]}
+def create_svg(track):
+    return f'''<svg width="300" height="80" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100%" height="100%" fill="#9400D3" rx="5"/>
+    <text x="20" y="30" font-family="Arial" font-size="14" fill="white">
+        {track["name"][:20]}{"..." if len(track["name"]) > 20 else ""}
     </text>
-    <text x="125" y="60" font-family="Arial" font-size="14" fill="#EEE">
-        {track_data["artist"]}
+    <text x="20" y="50" font-family="Arial" font-size="12" fill="#EEE">
+        {track["artist"][:20]}{"..." if len(track["artist"]) > 20 else ""}
     </text>
-    <text x="125" y="85" font-family="Arial" font-size="12" fill="#DDD">
-        {track_data["status"]}
+    <text x="20" y="70" font-family="Arial" font-size="10" fill="#DDD">
+        {"▶ Сейчас играет" if track["now"] else "⏱ " + datetime.now().strftime("%H:%M")}
     </text>
 </svg>'''
-    
-    return svg_content
 
 if __name__ == "__main__":
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    track = get_track_info() or {
-        "track": "Трек не найден",
+    track = get_track() or {
+        "name": "Не удалось загрузить",
         "artist": "Проверьте настройки",
-        "status": "Ошибка подключения",
-        "cover": None
+        "now": False
     }
-    
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-        f.write(generate_svg(track))
+    os.makedirs("assets", exist_ok=True)
+    with open(OUTPUT_PATH, "w") as f:
+        f.write(create_svg(track))
