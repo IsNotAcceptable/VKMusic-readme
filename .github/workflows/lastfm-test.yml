@@ -24,26 +24,20 @@ jobs:
       - name: Install dependencies
         run: pip install requests
           
-      - name: Generate test widget
+      - name: Generate and verify widget
         run: |
           python scripts/generate_svg.py
-          cat debug.log  # Выводим лог в консоль
+          echo "=== Проверка файла ==="
+          ls -la assets/
+          head -n 3 assets/lastfm_widget.svg
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
-          
-      - name: Upload debug logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-logs
-          path: |
-            debug.log
-            assets/lastfm_widget.svg
           
       - name: Commit result
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add assets/ debug.log
-          git commit -m "Test cover image [skip ci]" || exit 0
+          git add assets/lastfm_widget.svg
+          git commit -m "Test: cover image update [skip ci]" || exit 0
           git push origin cover-test
