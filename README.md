@@ -1,11 +1,9 @@
 # VKMusic-readme
 
-# Мой профиль GitHub
+# Мой профиль
 
-## 🎶 Что я слушаю
+## 🎶 Текущий трек
 
-<!-- LASTFM_START -->
-🎵 **Последний трек**: Неизвестно — Ещё ничего не играло
-<!-- LASTFM_END -->
+![Last.fm Widget](https://raw.githubusercontent.com/IsNotAcceptable/VKMusic-readme/main/docs/lastfm-widget.svg?sanitize=true)
 
-[![Last.fm](https://img.shields.io/badge/Last.fm-View_my_profile-d51007?logo=lastfm)](https://www.last.fm/user/ME4TAs)
+[![Last.fm](https://img.shields.io/badge/Last.fm-Профиль-d51007?logo=lastfm)](https://www.last.fm/user/ME4TAs)
