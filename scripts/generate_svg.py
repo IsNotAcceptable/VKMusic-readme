@@ -9,18 +9,29 @@ LASTFM_USERNAME = os.getenv("LASTFM_USERNAME")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), '../assets/lastfm_widget.svg')
 
 def get_track_info():
-    """Получаем данные трека с Last.fm"""
-    url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1"
+    """Получаем данные трека с обложкой"""
+    url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1&extended=1"
     try:
         response = requests.get(url, timeout=10)
         data = response.json()
         track = data["recenttracks"]["track"][0]
         
+        # Получаем URL обложки максимального размера
+        cover_url = None
+        if track.get("image"):
+            # Ищем изображение с тегом "extralarge" или "large"
+            for img in track["image"]:
+                if img["size"] == "extralarge":
+                    cover_url = img["#text"]
+                    break
+            if not cover_url:
+                cover_url = track["image"][-1]["#text"]  # Берем последнее доступное
+        
         return {
             "track": track["name"][:25] + ("..." if len(track["name"]) > 25 else ""),
             "artist": track["artist"]["#text"][:25] + ("..." if len(track["artist"]["#text"]) > 25 else ""),
-            "status": "▶ Сейчас играет" if "@attr" in track and track["@attr"]["nowplaying"] == "true" else f"⏱ Обновлено: {datetime.now().strftime('%H:%M')}",
-            "cover": track["image"][-1]["#text"] if track.get("image") else None
+            "status": "▶ Сейчас играет" if "@attr" in track and track["@attr"]["nowplaying"] == "true" else f"⏱ {datetime.now().strftime('%H:%M')}",
+            "cover": cover_url if cover_url and not cover_url.endswith('/placeholder.png') else None
         }
     except Exception as e:
         print(f"Error: {e}")
@@ -28,7 +39,7 @@ def get_track_info():
 
 def generate_svg(track_data):
     """Генерируем SVG с обложкой"""
-    return f'''<?xml version="1.0" encoding="UTF-8"?>
+    svg_content = f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
@@ -40,14 +51,19 @@ def generate_svg(track_data):
         </linearGradient>
     </defs>
 
-    <rect width="100%" height="100%" fill="url(#bg)" rx="6"/>
+    <rect width="100%" height="100%" fill="url(#bg)" rx="6"/>'''
 
-    <!-- Обложка -->
-    {f'<image href="{track_data["cover"]}" x="10" y="10" width="100" height="100" filter="url(#shadow)" preserveAspectRatio="xMidYMid meet"/>' 
-     if track_data["cover"] else 
-     '<rect x="10" y="10" width="100" height="100" fill="#6A0099" rx="4"/>'}
+    # Добавляем обложку или заглушку
+    if track_data["cover"]:
+        svg_content += f'''
+    <image href="{track_data["cover"]}" x="10" y="10" width="100" height="100" filter="url(#shadow)" preserveAspectRatio="xMidYMid meet"/>'''
+    else:
+        svg_content += '''
+    <rect x="10" y="10" width="100" height="100" fill="#6A0099" rx="4"/>
+    <text x="60" y="60" text-anchor="middle" font-family="Arial" font-size="12" fill="white">No cover</text>'''
 
-    <!-- Текст -->
+    # Добавляем текст
+    svg_content += f'''
     <text x="125" y="35" font-family="Arial" font-size="16" font-weight="600" fill="white">
         {track_data["track"]}
     </text>
@@ -58,6 +74,8 @@ def generate_svg(track_data):
         {track_data["status"]}
     </text>
 </svg>'''
+    
+    return svg_content
 
 if __name__ == "__main__":
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
