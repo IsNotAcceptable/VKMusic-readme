@@ -1,7 +1,7 @@
 # VKMusic-readme
 
-## 🎶 Сейчас слушаю
+## 🎵 Сейчас слушаю
 
-<img src="https://raw.githubusercontent.com/IsNotAcceptable/VKMusic-readme/main/assets/lastfm_widget.svg" width="350" alt="Last.fm Widget">
+<img src="https://raw.githubusercontent.com/IsNotAcceptable/VKMusic-readme/main/assets/lastfm_widget.svg?sanitize=true&v=1" width="400" alt="Last.fm Widget">
 
-[Мой Last.fm профиль](https://www.last.fm/user/ME4TAs)
+[![Last.fm](https://img.shields.io/badge/Last.fm-Профиль-d51007?logo=lastfm)](https://www.last.fm/user/ME4TAs)
