@@ -22,8 +22,19 @@ jobs:
       - name: Install dependencies
         run: pip install requests
           
-      - name: Generate widget
-        run: python scripts/generate_svg.py
+      - name: Generate and verify widget
+        run: |
+          # Генерируем SVG
+          python scripts/generate_svg.py
+          
+          # Проверяем что файл создан
+          if [ ! -f "assets/lastfm_widget.svg" ]; then
+            echo "❌ Файл SVG не создан!"
+            exit 1
+          fi
+          
+          echo "=== Проверка содержимого SVG ==="
+          head -n 3 assets/lastfm_widget.svg
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
