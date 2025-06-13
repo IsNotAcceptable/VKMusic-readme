@@ -2,7 +2,7 @@ name: Last.fm Widget Updater
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/5 * * * *"  # Каждые 5 минут
   workflow_dispatch:
 
 permissions:
@@ -25,16 +25,18 @@ jobs:
       - name: Generate widget
         run: |
           python scripts/generate_svg.py
-          echo "=== SVG Info ==="
-          file assets/lastfm_widget.svg
+          # Добавляем timestamp к SVG
+          echo "timestamp=$(date +%s)" >> $GITHUB_ENV
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
           
-      - name: Commit changes
+      - name: Update README
         run: |
+          # Обновляем ссылку в README.md с новым timestamp
+          sed -i "s/?t=[0-9]*/?t=${{ env.timestamp }}/g" README.md
+          git add README.md assets/lastfm_widget.svg
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add assets/lastfm_widget.svg
-          git commit -m "Auto-update widget [skip ci]" || echo "No changes"
+          git commit -m "🔄 Обновление виджета [${{ env.timestamp }}]"
           git push
