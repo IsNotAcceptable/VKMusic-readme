@@ -1,22 +1,25 @@
-name: Last.fm Track Widget
+name: Last.fm Widget Updater
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/5 * * * *"  # Каждые 5 минут
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write  # Критически важно!
 
 jobs:
-  update:
+  update-widget:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          fetch-depth: 0  # Важно для работы git push
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
@@ -24,16 +27,16 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Generate SVG
+      - name: Generate SVG widget
         run: python scripts/generate_svg.py
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
 
-      - name: Commit & Push
+      - name: Commit and push changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add assets/lastfm_widget.svg
-          git commit -m "🔄 Обновлён Last.fm widget" || echo "Нет изменений"
-          g it push
+          git diff --quiet && git diff --staged --quiet || git commit -m "🔄 Auto-update Last.fm widget"
+          git push
