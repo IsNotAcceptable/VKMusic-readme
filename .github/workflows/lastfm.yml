@@ -1,8 +1,10 @@
-name: Last.fm Auto Updater
+name: Last.fm Cover Test
 
 on:
+  push:
+    branches: [cover-test]  # Важно: указываем конкретную ветку
   schedule:
-    - cron: "*/5 * * * *"  # Каждые 5 минут
+    - cron: "*/5 * * * *"  # Автообновление каждые 5 минут
   workflow_dispatch:
 
 permissions:
@@ -13,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+        with:
+          ref: cover-test  # Явно указываем ветку
+        
       - name: Force update
-        run: |
-          # Генерируем уникальный timestamp
-          echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-          
+        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+      
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -27,7 +29,6 @@ jobs:
       - name: Generate widget
         run: |
           python scripts/generate_svg.py ${{ env.TIMESTAMP }}
-          # Переименовываем файл с timestamp
           mv assets/lastfm_widget.svg "assets/lastfm_widget_${{ env.TIMESTAMP }}.svg"
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
@@ -35,12 +36,7 @@ jobs:
           
       - name: Update README
         run: |
-          # Обновляем ссылку в README
-          NEW_URL="https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/assets/lastfm_widget_${{ env.TIMESTAMP }}.svg"
-          sed -i "s|https://raw.*svg|$NEW_URL|g" README.md
-          
+          sed -i "s|lastfm_widget_.*svg|lastfm_widget_${{ env.TIMESTAMP }}.svg|g" README.md
           git add README.md assets/
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
           git commit -m "🔄 Автообновление [${{ env.TIMESTAMP }}]"
           git push
