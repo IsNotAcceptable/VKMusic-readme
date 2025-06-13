@@ -11,6 +11,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}  # Используем наш секрет
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -18,13 +20,10 @@ jobs:
           python-version: "3.10"
           
       - name: Install dependencies
-        run: |
-          pip install requests
-          pip install python-dotenv
+        run: pip install requests python-dotenv
           
       - name: Generate SVG
-        working-directory: ${{ github.workspace }}
-        run: python ./scripts/generate_svg.py
+        run: python scripts/generate_svg.py
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
@@ -36,3 +35,5 @@ jobs:
           git add assets/lastfm_widget.svg
           git commit -m "🔄 Обновлён Last.fm widget" || echo "Нет изменений"
           git push
+        env:
+          GIT_AUTH_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # Передаем токен
