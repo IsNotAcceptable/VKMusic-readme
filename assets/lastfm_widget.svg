@@ -1,28 +1,15 @@
-<svg width="350" height="120" xmlns="http://www.w3.org/2000/svg">
-    <!-- Внешняя оболочка с тенью -->
-    <rect width="100%" height="100%" rx="10" fill="#1A1A1A"/>
-    
-    <!-- Внутренняя рамка -->
-    <rect x="5" y="5" width="340" height="110" rx="8" fill="#9400D3" stroke="#EEE" stroke-width="2"/>
-    
-    <!-- Заголовок -->
-    <text x="20" y="30" font-family="Arial" font-size="14" fill="#EEE" font-weight="bold">
-        Сейчас слушаю (Last.fm)
-    </text>
-    
-    <!-- Разделительная линия -->
-    <line x1="20" y1="40" x2="330" y2="40" stroke="#EEE" stroke-width="1" stroke-dasharray="5,3"/>
+<svg width="500" height="100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Обложка альбома -->
+    <image href="https://lastfm.freetls.fastly.net/i/u/300x300/6c0ebcefd41995f4a2732ad42aa92a71.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
     
     <!-- Информация о треке -->
-    <text x="20" y="65" font-family="Arial" font-size="16" fill="white">
+    <text x="120" y="40" font-family="Arial" font-size="18" fill="#333" font-weight="bold">
         я очень устал
     </text>
-    <text x="20" y="90" font-family="Arial" font-size="14" fill="#EEE">
+    <text x="120" y="65" font-family="Arial" font-size="16" fill="#555">
         Пасош
     </text>
-    
-    <!-- Статус -->
-    <text x="20" y="115" font-family="Arial" font-size="12" fill="#DDD">
+    <text x="120" y="90" font-family="Arial" font-size="14" fill="#777">
         ▶ Сейчас играет
     </text>
 </svg>
