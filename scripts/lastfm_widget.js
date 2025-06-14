@@ -6,9 +6,27 @@ const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 const LASTFM_USERNAME = process.env.LASTFM_USERNAME;
 const OUTPUT_PATH = '../assets/lastfm_widget.svg';
 
+// Кэш для баз64 обложек
+const imageCache = new Map();
+
+async function fetchImageAsBase64(url) {
+    if (!url) return null;
+    
+    try {
+        const response = await axios.get(url, {
+            responseType: 'arraybuffer',
+            timeout: 5000
+        });
+        return `data:${response.headers['content-type']};base64,${response.data.toString('base64')}`;
+    } catch (error) {
+        console.error('Ошибка загрузки обложки:', error.message);
+        return null;
+    }
+}
+
 async function getTrackInfo() {
     try {
-        const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USERNAME}&api_key=${LASTFM_API_KEY}&format=json&limit=1&extended=1`;
+        const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USERNAME}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
         const response = await axios.get(url, { timeout: 5000 });
         
         if (!response.data?.recenttracks?.track?.length) {
@@ -16,16 +34,40 @@ async function getTrackInfo() {
         }
 
         const track = response.data.recenttracks.track[0];
-        const image = track.image?.find(img => img.size === 'extralarge') || track.image?.find(img => img.size === 'large');
+        let imageUrl = '';
+
+        // Ищем обложку (приоритет: extralarge > large > medium)
+        const sizes = ['extralarge', 'large', 'medium'];
+        for (const size of sizes) {
+            const img = track.image?.find(img => img.size === size);
+            if (img?.['#text']) {
+                imageUrl = img['#text'];
+                break;
+            }
+        }
+
+        // Получаем base64 обложки
+        let imageBase64 = '';
+        if (imageUrl) {
+            if (imageCache.has(imageUrl)) {
+                imageBase64 = imageCache.get(imageUrl);
+            } else {
+                imageBase64 = await fetchImageAsBase64(imageUrl);
+                if (imageBase64) {
+                    imageCache.set(imageUrl, imageBase64);
+                }
+            }
+        }
 
         return {
             name: track.name || 'Неизвестный трек',
             artist: track.artist?.['#text'] || 'Неизвестный исполнитель',
             nowPlaying: track['@attr']?.nowplaying === 'true',
-            imageUrl: image?.['#text'] || ''
+            imageBase64: imageBase64
         };
+        
     } catch (error) {
-        console.error('Ошибка при получении данных:', error.message);
+        console.error('Ошибка Last.fm API:', error.message);
         return null;
     }
 }
@@ -35,10 +77,10 @@ function generateSVG(track) {
         name: 'Нет данных о треке',
         artist: 'Проверьте настройки Last.fm',
         nowPlaying: false,
-        imageUrl: ''
+        imageBase64: ''
     };
     
-    const { name, artist, nowPlaying, imageUrl } = track || fallbackTrack;
+    const { name, artist, nowPlaying, imageBase64 } = track || fallbackTrack;
     const time = DateTime.now().toFormat('HH:mm');
     const bgColor = '#9400D3';
 
@@ -49,8 +91,8 @@ function generateSVG(track) {
     
     <!-- Обложка -->
     <rect x="10" y="10" width="80" height="80" fill="rgba(0,0,0,0.2)" rx="5"/>
-    ${imageUrl ? `
-    <image href="${imageUrl}" x="10" y="10" width="80" height="80" preserveAspectRatio="xMidYMid cover" rx="5"/>
+    ${imageBase64 ? `
+    <image href="${imageBase64}" x="10" y="10" width="80" height="80" preserveAspectRatio="xMidYMid cover" rx="5"/>
     ` : ''}
     
     <!-- Текст -->
@@ -82,7 +124,10 @@ async function main() {
         fs.writeFileSync(OUTPUT_PATH, svg);
         console.log('SVG успешно обновлен!');
     } catch (error) {
-        console.error('Ошибка:', error.message);
+        console.error('Фатальная ошибка:', error.message);
+        // Создаем fallback SVG
+        const fallbackSvg = generateSVG(null);
+        fs.writeFileSync(OUTPUT_PATH, fallbackSvg);
     }
 }
 
