@@ -1,6 +1,7 @@
 import os
 import requests
 from datetime import datetime
+from urllib.parse import quote
 
 LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 LASTFM_USERNAME = os.getenv("LASTFM_USERNAME")
@@ -8,7 +9,7 @@ OUTPUT_PATH = "assets/lastfm_widget.svg"
 
 def get_track_info():
     """Получаем данные трека с обложкой"""
-    url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1"
+    url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1&extended=1"
     
     try:
         response = requests.get(url, timeout=10)
@@ -19,11 +20,19 @@ def get_track_info():
             return None
             
         track = data["recenttracks"]["track"][0]
+        image_url = ""
+        
+        # Получаем самую большую доступную обложку
+        for image in track.get("image", []):
+            if image["size"] == "extralarge":
+                image_url = image.get("#text", "")
+                break
+        
         return {
             "name": track.get("name", "Неизвестный трек"),
             "artist": track["artist"].get("#text", "Неизвестный исполнитель"),
             "now_playing": track.get("@attr", {}).get("nowplaying", "false") == "true",
-            "image": track.get("image", [{}])[-1].get("#text", "")
+            "image": image_url
         }
         
     except requests.exceptions.RequestException as e:
@@ -34,7 +43,7 @@ def get_track_info():
     return None
 
 def create_svg(track_data):
-    """Генерируем минималистичный SVG"""
+    """Генерируем SVG с обложкой и фоном"""
     track = track_data or {
         "name": "Нет данных о треке",
         "artist": "Проверьте настройки Last.fm",
@@ -42,18 +51,28 @@ def create_svg(track_data):
         "image": ""
     }
     
-    return f'''<svg width="500" height="100" xmlns="http://www.w3.org/2000/svg">
-    <!-- Обложка альбома -->
-    {f'<image href="{track["image"]}" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>' if track["image"] else ''}
+    # Запасной фоновый цвет
+    bg_color = "#1DB954"  # Spotify-зелёный как fallback
+    
+    return f'''<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Фон -->
+    <rect width="100%" height="100%" fill="{bg_color}"/>
+    
+    <!-- Обложка альбома (с запасным прямоугольником) -->
+    {f'<image href="{track["image"]}" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>' 
+     if track["image"] else 
+     f'<rect x="0" y="0" width="100" height="100" fill="#333"/>'}
     
     <!-- Информация о треке -->
-    <text x="120" y="40" font-family="Arial" font-size="18" fill="#333" font-weight="bold">
-        {track["name"][:25]}{"..." if len(track["name"]) > 25 else ""}
+    <rect x="110" y="10" width="280" height="80" rx="5" fill="rgba(0,0,0,0.6)"/>
+    
+    <text x="120" y="40" font-family="Arial" font-size="16" fill="white" font-weight="bold">
+        {track["name"][:20]}{"..." if len(track["name"]) > 20 else ""}
     </text>
-    <text x="120" y="65" font-family="Arial" font-size="16" fill="#555">
-        {track["artist"][:25]}{"..." if len(track["artist"]) > 25 else ""}
+    <text x="120" y="65" font-family="Arial" font-size="14" fill="#DDD">
+        {track["artist"][:20]}{"..." if len(track["artist"]) > 20 else ""}
     </text>
-    <text x="120" y="90" font-family="Arial" font-size="14" fill="#777">
+    <text x="120" y="85" font-family="Arial" font-size="12" fill="#AAA">
         {"▶ Сейчас играет" if track["now_playing"] else "⏱ " + datetime.now().strftime("%H:%M")}
     </text>
 </svg>'''
