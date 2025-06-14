@@ -82,7 +82,7 @@ function generateSVG(track) {
     
     const { name, artist, nowPlaying, imageBase64 } = track || fallbackTrack;
     const time = DateTime.now().toFormat('HH:mm');
-    const bgColor = '#9400D3';
+    const bgColor = '#9400D3'; //Можете поменять цвет фона(HEX)
 
     return `
 <svg width="400" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
