@@ -4,7 +4,7 @@ const { DateTime } = require('luxon');
 
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 const LASTFM_USERNAME = process.env.LASTFM_USERNAME;
-const OUTPUT_PATH = './assets/lastfm_widget.svg';
+const OUTPUT_PATH = '../assets/lastfm_widget.svg';
 
 async function getTrackInfo() {
     try {
@@ -73,8 +73,8 @@ function truncate(str, maxLength) {
 
 async function main() {
     try {
-        if (!fs.existsSync('./assets')) {
-            fs.mkdirSync('./assets', { recursive: true });
+        if (!fs.existsSync('../assets')) {
+            fs.mkdirSync('../assets', { recursive: true });
         }
         
         const track = await getTrackInfo();
