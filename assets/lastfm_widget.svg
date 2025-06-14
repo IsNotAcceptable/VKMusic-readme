@@ -1,20 +1,19 @@
 <svg width="400" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Фон -->
-    <rect width="100%" height="100%" fill="#1DB954"/>
+    <rect width="100%" height="100%" fill="#9400D3"/>
     
-    <!-- Обложка альбома (с запасным прямоугольником) -->
-    <image href="https://lastfm.freetls.fastly.net/i/u/300x300/6c0ebcefd41995f4a2732ad42aa92a71.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
+    <!-- Обложка (с прозрачной подложкой если нет изображения) -->
+    <rect x="0" y="0" width="100" height="100" fill="rgba(0,0,0,0.2)"/>
+    <image href="https://lastfm.freetls.fastly.net/i/u/174s/6c0ebcefd41995f4a2732ad42aa92a71.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>
     
     <!-- Информация о треке -->
-    <rect x="110" y="10" width="280" height="80" rx="5" fill="rgba(0,0,0,0.6)"/>
-    
-    <text x="120" y="40" font-family="Arial" font-size="16" fill="white" font-weight="bold">
+    <text x="110" y="35" font-family="Arial" font-size="16" fill="white" font-weight="bold">
         я очень устал
     </text>
-    <text x="120" y="65" font-family="Arial" font-size="14" fill="#DDD">
+    <text x="110" y="60" font-family="Arial" font-size="14" fill="#EEE">
         Неизвестный исполнит...
     </text>
-    <text x="120" y="85" font-family="Arial" font-size="12" fill="#AAA">
+    <text x="110" y="85" font-family="Arial" font-size="12" fill="#DDD">
         ▶ Сейчас играет
     </text>
 </svg>
