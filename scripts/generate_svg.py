@@ -1,7 +1,6 @@
 import os
 import requests
 from datetime import datetime
-from urllib.parse import quote
 
 LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 LASTFM_USERNAME = os.getenv("LASTFM_USERNAME")
@@ -22,11 +21,11 @@ def get_track_info():
         track = data["recenttracks"]["track"][0]
         image_url = ""
         
-        # Получаем самую большую доступную обложку
+        # Ищем обложку extralarge или large
         for image in track.get("image", []):
-            if image["size"] == "extralarge":
+            if image["size"] in ["extralarge", "large"]:
                 image_url = image.get("#text", "")
-                break
+                if image_url: break
         
         return {
             "name": track.get("name", "Неизвестный трек"),
@@ -43,7 +42,7 @@ def get_track_info():
     return None
 
 def create_svg(track_data):
-    """Генерируем SVG с обложкой и фоном"""
+    """Генерируем SVG с вашим фирменным цветом"""
     track = track_data or {
         "name": "Нет данных о треке",
         "artist": "Проверьте настройки Last.fm",
@@ -51,28 +50,25 @@ def create_svg(track_data):
         "image": ""
     }
     
-    # Запасной фоновый цвет
-    bg_color = "#1DB954"  # Spotify-зелёный как fallback
+    bg_color = "#9400D3"  # Ваш оригинальный фиолетовый
     
     return f'''<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Фон -->
     <rect width="100%" height="100%" fill="{bg_color}"/>
     
-    <!-- Обложка альбома (с запасным прямоугольником) -->
+    <!-- Обложка (с прозрачной подложкой если нет изображения) -->
+    <rect x="0" y="0" width="100" height="100" fill="rgba(0,0,0,0.2)"/>
     {f'<image href="{track["image"]}" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>' 
-     if track["image"] else 
-     f'<rect x="0" y="0" width="100" height="100" fill="#333"/>'}
+     if track["image"] else ''}
     
     <!-- Информация о треке -->
-    <rect x="110" y="10" width="280" height="80" rx="5" fill="rgba(0,0,0,0.6)"/>
-    
-    <text x="120" y="40" font-family="Arial" font-size="16" fill="white" font-weight="bold">
+    <text x="110" y="35" font-family="Arial" font-size="16" fill="white" font-weight="bold">
         {track["name"][:20]}{"..." if len(track["name"]) > 20 else ""}
     </text>
-    <text x="120" y="65" font-family="Arial" font-size="14" fill="#DDD">
+    <text x="110" y="60" font-family="Arial" font-size="14" fill="#EEE">
         {track["artist"][:20]}{"..." if len(track["artist"]) > 20 else ""}
     </text>
-    <text x="120" y="85" font-family="Arial" font-size="12" fill="#AAA">
+    <text x="110" y="85" font-family="Arial" font-size="12" fill="#DDD">
         {"▶ Сейчас играет" if track["now_playing"] else "⏱ " + datetime.now().strftime("%H:%M")}
     </text>
 </svg>'''
