@@ -21,9 +21,11 @@ jobs:
           
       - name: Install dependencies
         run: npm install axios luxon
+        working-directory: ./scripts
           
       - name: Generate widget
         run: node lastfm_widget.js
+        working-directory: ./scripts
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
