@@ -14,27 +14,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: pip install requests pillow
+          node-version: '20'
           
-      - name: Install requests
-        run: pip install requests
+      - name: Install dependencies
+        run: npm install axios luxon
           
       - name: Generate widget
-        run: python scripts/generate_svg.py
+        run: node lastfm_widget.js
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
           
-      - name: Commit
+      - name: Commit changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add assets/lastfm_widget.svg
-          git commit -m "♻️ Update track" || exit 0
+          git commit -m "🔄 Обновление текущего трека" || exit 0
           git push
