@@ -2,7 +2,7 @@ name: Last.fm Updater
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/5 * * * *"  # Каждые 5 минут
   workflow_dispatch:
 
 permissions:
@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '20'
           
-      - name: Prepare scripts directory
+      - name: Install dependencies
         run: |
           mkdir -p scripts
           echo "{\"dependencies\":{\"axios\":\"^1.6.7\",\"luxon\":\"^3.4.4\"}}" > scripts/package.json
@@ -32,10 +32,10 @@ jobs:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
           
-      - name: Commit changes
+      - name: Force commit changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add assets/lastfm_widget.svg
-          git commit -m "🔄 Обновление текущего трека" || exit 0
+          git commit --allow-empty -m "🔄 Авто-обновление текущего трека"
           git push
