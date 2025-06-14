@@ -7,7 +7,7 @@ LASTFM_USERNAME = os.getenv("LASTFM_USERNAME")
 OUTPUT_PATH = "assets/lastfm_widget.svg"
 
 def get_track_info():
-    """Получаем данные трека с улучшенной обработкой ошибок"""
+    """Получаем данные трека с обложкой"""
     url = f"http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user={LASTFM_USERNAME}&api_key={LASTFM_API_KEY}&format=json&limit=1"
     
     try:
@@ -22,7 +22,8 @@ def get_track_info():
         return {
             "name": track.get("name", "Неизвестный трек"),
             "artist": track["artist"].get("#text", "Неизвестный исполнитель"),
-            "now_playing": track.get("@attr", {}).get("nowplaying", "false") == "true"
+            "now_playing": track.get("@attr", {}).get("nowplaying", "false") == "true",
+            "image": track.get("image", [{}])[-1].get("#text", "")
         }
         
     except requests.exceptions.RequestException as e:
@@ -33,38 +34,26 @@ def get_track_info():
     return None
 
 def create_svg(track_data):
-    """Генерируем SVG с улучшенной оболочкой"""
+    """Генерируем минималистичный SVG"""
     track = track_data or {
         "name": "Нет данных о треке",
         "artist": "Проверьте настройки Last.fm",
-        "now_playing": False
+        "now_playing": False,
+        "image": ""
     }
     
-    return f'''<svg width="350" height="120" xmlns="http://www.w3.org/2000/svg">
-    <!-- Внешняя оболочка с тенью -->
-    <rect width="100%" height="100%" rx="10" fill="#1A1A1A"/>
-    
-    <!-- Внутренняя рамка -->
-    <rect x="5" y="5" width="340" height="110" rx="8" fill="#9400D3" stroke="#EEE" stroke-width="2"/>
-    
-    <!-- Заголовок -->
-    <text x="20" y="30" font-family="Arial" font-size="14" fill="#EEE" font-weight="bold">
-        Сейчас слушаю (Last.fm)
-    </text>
-    
-    <!-- Разделительная линия -->
-    <line x1="20" y1="40" x2="330" y2="40" stroke="#EEE" stroke-width="1" stroke-dasharray="5,3"/>
+    return f'''<svg width="500" height="100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Обложка альбома -->
+    {f'<image href="{track["image"]}" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"/>' if track["image"] else ''}
     
     <!-- Информация о треке -->
-    <text x="20" y="65" font-family="Arial" font-size="16" fill="white">
+    <text x="120" y="40" font-family="Arial" font-size="18" fill="#333" font-weight="bold">
         {track["name"][:25]}{"..." if len(track["name"]) > 25 else ""}
     </text>
-    <text x="20" y="90" font-family="Arial" font-size="14" fill="#EEE">
+    <text x="120" y="65" font-family="Arial" font-size="16" fill="#555">
         {track["artist"][:25]}{"..." if len(track["artist"]) > 25 else ""}
     </text>
-    
-    <!-- Статус -->
-    <text x="20" y="115" font-family="Arial" font-size="12" fill="#DDD">
+    <text x="120" y="90" font-family="Arial" font-size="14" fill="#777">
         {"▶ Сейчас играет" if track["now_playing"] else "⏱ " + datetime.now().strftime("%H:%M")}
     </text>
 </svg>'''
