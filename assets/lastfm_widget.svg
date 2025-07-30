@@ -10,12 +10,12 @@
     
     <!-- Текст -->
     <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" fill="white" font-weight="bold">
-        Jingle Bell Rock
+        Hark the Herald Ange...
     </text>
     <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#EEE">
-        Bobby Helms
+        Nat King Cole
     </text>
     <text x="100" y="85" font-family="Arial, sans-serif" font-size="12" fill="#DDD">
-        ▶ Сейчас играет
+        ⏱ 22:14
     </text>
 </svg>
