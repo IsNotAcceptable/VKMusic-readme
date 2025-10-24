@@ -10,12 +10,12 @@
     
     <!-- Текст -->
     <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" fill="white" font-weight="bold">
-        Rum and Coca Cola
+        Jail House Rock
     </text>
     <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#EEE">
-        The Andrews Sisters
+        Elvis Presley
     </text>
     <text x="100" y="85" font-family="Arial, sans-serif" font-size="12" fill="#DDD">
-        ▶ Сейчас играет
+        ⏱ 17:25
     </text>
 </svg>
