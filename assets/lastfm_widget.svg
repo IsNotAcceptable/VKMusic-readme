@@ -10,12 +10,12 @@
     
     <!-- Текст -->
     <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" fill="white" font-weight="bold">
-        Runaway
+        In the End
     </text>
     <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#EEE">
         Linkin Park
     </text>
     <text x="100" y="85" font-family="Arial, sans-serif" font-size="12" fill="#DDD">
-        ⏱ 07:52
+        ▶ Сейчас играет
     </text>
 </svg>
