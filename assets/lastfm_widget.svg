@@ -10,7 +10,7 @@
     
     <!-- Текст -->
     <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" fill="white" font-weight="bold">
-        Basket Case
+        Welcome to Paradise
     </text>
     <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#EEE">
         Green Day
