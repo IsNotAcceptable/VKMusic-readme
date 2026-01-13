@@ -8,12 +8,12 @@
     
     <!-- Текст -->
     <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" fill="white" font-weight="bold">
-        Нет данных о треке
+        Arcade
     </text>
     <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#EEE">
-        Проверьте настройки ...
+        Duncan Laurence
     </text>
     <text x="100" y="85" font-family="Arial, sans-serif" font-size="12" fill="#DDD">
-        ⏱ 07:50
+        ⏱ 08:23
     </text>
 </svg>
