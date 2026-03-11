@@ -8,12 +8,12 @@
     
     <!-- Текст -->
     <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" fill="white" font-weight="bold">
-        The Only Thing I Kno...
+        Нет данных о треке
     </text>
     <text x="100" y="60" font-family="Arial, sans-serif" font-size="14" fill="#EEE">
-        Metal Gear Rising
+        Проверьте настройки ...
     </text>
     <text x="100" y="85" font-family="Arial, sans-serif" font-size="12" fill="#DDD">
-        ⏱ 19:51
+        ⏱ 20:30
     </text>
 </svg>
