@@ -1,5 +1,9 @@
 # VKMusic-readme
 Показывайте сейчас играющую музыку на ВКонтакте прямо в README профиля!
+
+[![Badge](https://img.shields.io/github/issues/IsNotAcceptable/VKMusic-readme?style=for-the-badge)](https://github.com/IsNotAcceptable/VKMusic-readme/issues)
+[![Badge](https://img.shields.io/github/forks/IsNotAcceptable/VKMusic-readme?style=for-the-badge)](https://github.com/IsNotAcceptable/VKMusic-readme/network)
+[![Badge](https://img.shields.io/github/stars/IsNotACceptable/VKMusic-readme?style=for-the-badge)](https://github.com/IsNotAcceptable/VKMusic-readme/stargazers)
 <!-- vkmusic-start -->
 
 ![Now Playing](./music-card.svg?v=1777227738)
