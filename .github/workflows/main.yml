@@ -16,6 +16,16 @@ jobs:
           python-version: '3.x'
       - name: Install requests
         run: pip install requests
+      - name: Debug VK API
+        env:
+          VK_TOKEN: ${{ secrets.VK_TOKEN }}
+        run: |
+          python3 -c "
+          import os, requests, json
+          t = os.environ['VK_TOKEN']
+          r = requests.get('https://api.vk.com/method/status.get', params={'access_token': t, 'v': '5.131'})
+          print(json.dumps(r.json(), ensure_ascii=False, indent=2))
+          "
       - name: Run script
         env:
           VK_TOKEN: ${{ secrets.VK_TOKEN }}
