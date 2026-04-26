@@ -42,21 +42,23 @@ def generate_svg(artist, title, cover_url):
     <clipPath id="card-clip">
       <rect width="480" height="120" rx="16"/>
     </clipPath>
-    <clipPath id="wave-clip">
-      <rect x="350" y="0" width="118" height="120" rx="0"/>
-    </clipPath>
     <style>
-      @keyframes wave1 {{ 0% {{ d: path("M350,90 C370,75 390,105 410,90 C430,75 450,105 468,90 L468,120 L350,120 Z"); }} 50% {{ d: path("M350,90 C370,105 390,75 410,90 C430,105 450,75 468,90 L468,120 L350,120 Z"); }} 100% {{ d: path("M350,90 C370,75 390,105 410,90 C430,75 450,105 468,90 L468,120 L350,120 Z"); }} }}
-      @keyframes wave2 {{ 0% {{ d: path("M350,95 C365,82 385,108 410,95 C435,82 455,108 468,95 L468,120 L350,120 Z"); }} 50% {{ d: path("M350,95 C365,108 385,82 410,95 C435,108 455,82 468,95 L468,120 L350,120 Z"); }} 100% {{ d: path("M350,95 C365,82 385,108 410,95 C435,82 455,108 468,95 L468,120 L350,120 Z"); }} }}
-      @keyframes wave3 {{ 0% {{ d: path("M350,100 C370,90 395,110 420,100 C445,90 458,108 468,100 L468,120 L350,120 Z"); }} 50% {{ d: path("M350,100 C370,110 395,90 420,100 C445,110 458,92 468,100 L468,120 L350,120 Z"); }} 100% {{ d: path("M350,100 C370,90 395,110 420,100 C445,90 458,108 468,100 L468,120 L350,120 Z"); }} }}
-      .w1 {{ animation: wave1 3s ease-in-out infinite; }}
-      .w2 {{ animation: wave2 2.5s ease-in-out infinite .4s; }}
-      .w3 {{ animation: wave3 2s ease-in-out infinite .8s; }}
+      @keyframes wm   {{ 0%{{transform:translateX(0)}}   100%{{transform:translateX(-50%)}} }}
+      @keyframes wm2  {{ 0%{{transform:translateX(0)}}   100%{{transform:translateX(50%)}}  }}
+      @keyframes pulse {{ 0%,100%{{opacity:1}} 50%{{opacity:0.5}} }}
+      .wa {{ animation: wm  6s linear infinite; }}
+      .wb {{ animation: wm2 9s linear infinite; }}
+      .ring {{ animation: pulse 2s ease-in-out infinite; }}
     </style>
   </defs>
 
   <rect width="480" height="120" rx="16" fill="url(#bg)"/>
   <rect width="480" height="120" rx="16" fill="url(#fade)" clip-path="url(#card-clip)"/>
+
+  <g clip-path="url(#card-clip)">
+    <g class="wa"><path fill="rgba(255,255,255,0.06)" d="M0,95 C60,82 120,108 180,95 C240,82 300,108 360,95 C420,82 480,108 540,95 C600,82 660,108 720,95 L720,120 L0,120 Z"/></g>
+    <g class="wb"><path fill="rgba(255,255,255,0.04)" d="M0,102 C80,90 160,114 240,102 C320,90 400,114 480,102 C560,90 640,114 720,102 L720,120 L0,120 Z"/></g>
+  </g>
 
   {cover_block}
   <rect x="12" y="12" width="96" height="96" rx="8" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
@@ -68,9 +70,7 @@ def generate_svg(artist, title, cover_url):
   <rect x="124" y="96" width="220" height="3" rx="2" fill="rgba(255,255,255,0.1)"/>
   <rect x="124" y="96" width="90" height="3" rx="2" fill="{hex_accent}" opacity="0.8"/>
 
-  <g clip-path="url(#wave-clip)">
-    <path class="w1" fill="rgba(255,255,255,0.07)" d="M350,90 C370,75 390,105 410,90 C430,75 450,105 468,90 L468,120 L350,120 Z"/>
-    <path class="w2" fill="rgba(255,255,255,0.05)" d="M350,95 C365,82 385,108 410,95 C435,82 455,108 468,95 L468,120 L350,120 Z"/>
-    <path class="w3" fill="rgba(255,255,255,0.09)" d="M350,100 C370,90 395,110 420,100 C445,90 458,108 468,100 L468,120 L350,120 Z"/>
-  </g>
+  <circle class="ring" cx="415" cy="60" r="28" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <circle cx="415" cy="60" r="22" fill="rgba(255,255,255,0.12)"/>
+  <polygon points="409,50 409,70 431,60" fill="white" opacity="0.9"/>
 </svg>'''
