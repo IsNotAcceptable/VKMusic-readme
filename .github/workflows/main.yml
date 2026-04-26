@@ -40,9 +40,14 @@ jobs:
           python update_music.py
           echo "Script execution completed successfully"
 
-      - name: Commit and push changes
+      - name: Force commit and push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: Update music card [skip ci]" && git push)
+          if [ -z "$(git status --porcelain)" ]; then
+            git commit --allow-empty -m "chore: Trigger workflow [skip ci]"
+          else
+            git commit -m "chore: Update music card [skip ci]"
+          fi
+          git push
