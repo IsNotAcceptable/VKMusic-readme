@@ -1,5 +1,5 @@
 <!-- vkmusic-start -->
 
-![Now Playing](./music-card.svg?v=1777224379)
+![Now Playing](./music-card.svg?v=1777224747)
 
 <!-- vkmusic-end -->
