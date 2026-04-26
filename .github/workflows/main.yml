@@ -2,7 +2,7 @@ name: Update VK Music
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,41 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: Install requests
-        run: pip install requests
-      - name: Debug VK API
-        env:
-          VK_TOKEN: ${{ secrets.VK_TOKEN }}
-        run: |
-          python3 -c "
-          import os, requests, json
-          t = os.environ['VK_TOKEN']
-          r = requests.get('https://api.vk.com/method/status.get', params={'access_token': t, 'v': '5.131'})
-          print(json.dumps(r.json(), ensure_ascii=False, indent=2))
-          "
-      - name: Debug token
-        env:
-          VK_TOKEN: ${{ secrets.VK_TOKEN }}
-        run: |
-          python3 -c "
-          import os
-          t = os.environ['VK_TOKEN']
-          print(f'Length: {len(t)}')
-          print(f'Starts: {t[:10]}')
-          print(f'Ends: {t[-5:]}')
-          "
+
+      - name: Install dependencies
+        run: pip install requests colorthief Pillow
+
       - name: Run script
         env:
           VK_TOKEN: ${{ secrets.VK_TOKEN }}
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+          LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
         run: python update_music.py
+
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add README.md
-          git commit -m "Update music status" || exit 0
+          git add README.md music-card.svg
+          git commit -m "Update music card" || exit 0
           git push
