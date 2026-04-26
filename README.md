@@ -1,5 +1,5 @@
 <!-- vkmusic-start -->
 
-🎵 Ghost — Mary On A Cross
+![Now Playing](./music-card.svg)
 
 <!-- vkmusic-end -->

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="480" height="120">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a0315"/>
+      <stop offset="100%" stop-color="#0f0519"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1e0a3c" stop-opacity="0.45"/>
+      <stop offset="60%" stop-color="#1e0a3c" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="cover-clip">
+      <rect x="12" y="12" width="96" height="96" rx="8"/>
+    </clipPath>
+    <clipPath id="card-clip">
+      <rect width="480" height="120" rx="16"/>
+    </clipPath>
+    <style>
+      .bar { transform-origin: bottom; animation: eq .8s ease-in-out infinite; }
+      .b1 { animation-delay: 0s; }
+      .b2 { animation-delay: .15s; }
+      .b3 { animation-delay: .3s; }
+      .b4 { animation-delay: .45s; }
+      @keyframes eq {
+        0%,100% { transform: scaleY(0.4); }
+        50% { transform: scaleY(1); }
+      }
+    </style>
+  </defs>
+
+  <rect width="480" height="120" rx="16" fill="url(#bg)"/>
+  <rect width="480" height="120" rx="16" fill="url(#fade)" clip-path="url(#card-clip)"/>
+
+  <rect x="12" y="12" width="96" height="96" rx="8" fill="#1e0a3c" opacity="0.5"/><text x="60" y="66" text-anchor="middle" font-size="36" font-family="Arial">♫</text>
+  <rect x="12" y="12" width="96" height="96" rx="8" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+  <text x="124" y="36" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.45)" font-weight="600" letter-spacing="1.5">СЕЙЧАС ИГРАЕТ</text>
+  <text x="124" y="60" font-family="Arial,sans-serif" font-size="17" fill="white" font-weight="700">Bury The Light (remastered)</text>
+  <text x="124" y="80" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)">Casey Edwards ft. Victor Borba</text>
+
+  <rect x="124" y="96" width="220" height="3" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="124" y="96" width="90" height="3" rx="2" fill="#1e0a3c" opacity="0.8"/>
+
+  <g transform="translate(416, 42)">
+    <rect class="bar b1" x="0"  y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
+    <rect class="bar b2" x="9"  y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
+    <rect class="bar b3" x="18" y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
+    <rect class="bar b4" x="27" y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
+  </g>
+</svg>
