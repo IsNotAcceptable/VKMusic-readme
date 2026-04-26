@@ -4,32 +4,45 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests colorthief Pillow
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests colorthief Pillow
 
-      - name: Run script
+      - name: Run update script
         env:
           VK_TOKEN: ${{ secrets.VK_TOKEN }}
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
           LASTFM_USERNAME: ${{ secrets.LASTFM_USERNAME }}
-        run: python update_music.py
+        run: |
+          python update_music.py
+          echo "Script execution completed successfully"
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add README.md music-card.svg
-          git commit -m "Update music card" || exit 0
-          git push
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: Update music card [skip ci]" && git push)
