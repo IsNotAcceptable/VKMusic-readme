@@ -42,16 +42,16 @@ def generate_svg(artist, title, cover_url):
     <clipPath id="card-clip">
       <rect width="480" height="120" rx="16"/>
     </clipPath>
+    <clipPath id="wave-clip">
+      <rect x="350" y="0" width="118" height="120" rx="0"/>
+    </clipPath>
     <style>
-      .bar {{ transform-origin: bottom; animation: eq .8s ease-in-out infinite; }}
-      .b1 {{ animation-delay: 0s; }}
-      .b2 {{ animation-delay: .15s; }}
-      .b3 {{ animation-delay: .3s; }}
-      .b4 {{ animation-delay: .45s; }}
-      @keyframes eq {{
-        0%,100% {{ transform: scaleY(0.4); }}
-        50% {{ transform: scaleY(1); }}
-      }}
+      @keyframes wave1 {{ 0% {{ d: path("M350,90 C370,75 390,105 410,90 C430,75 450,105 468,90 L468,120 L350,120 Z"); }} 50% {{ d: path("M350,90 C370,105 390,75 410,90 C430,105 450,75 468,90 L468,120 L350,120 Z"); }} 100% {{ d: path("M350,90 C370,75 390,105 410,90 C430,75 450,105 468,90 L468,120 L350,120 Z"); }} }}
+      @keyframes wave2 {{ 0% {{ d: path("M350,95 C365,82 385,108 410,95 C435,82 455,108 468,95 L468,120 L350,120 Z"); }} 50% {{ d: path("M350,95 C365,108 385,82 410,95 C435,108 455,82 468,95 L468,120 L350,120 Z"); }} 100% {{ d: path("M350,95 C365,82 385,108 410,95 C435,82 455,108 468,95 L468,120 L350,120 Z"); }} }}
+      @keyframes wave3 {{ 0% {{ d: path("M350,100 C370,90 395,110 420,100 C445,90 458,108 468,100 L468,120 L350,120 Z"); }} 50% {{ d: path("M350,100 C370,110 395,90 420,100 C445,110 458,92 468,100 L468,120 L350,120 Z"); }} 100% {{ d: path("M350,100 C370,90 395,110 420,100 C445,90 458,108 468,100 L468,120 L350,120 Z"); }} }}
+      .w1 {{ animation: wave1 3s ease-in-out infinite; }}
+      .w2 {{ animation: wave2 2.5s ease-in-out infinite .4s; }}
+      .w3 {{ animation: wave3 2s ease-in-out infinite .8s; }}
     </style>
   </defs>
 
@@ -68,10 +68,9 @@ def generate_svg(artist, title, cover_url):
   <rect x="124" y="96" width="220" height="3" rx="2" fill="rgba(255,255,255,0.1)"/>
   <rect x="124" y="96" width="90" height="3" rx="2" fill="{hex_accent}" opacity="0.8"/>
 
-  <g transform="translate(416, 42)">
-    <rect class="bar b1" x="0"  y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
-    <rect class="bar b2" x="9"  y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
-    <rect class="bar b3" x="18" y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
-    <rect class="bar b4" x="27" y="0" width="5" height="22" rx="2" fill="rgba(255,255,255,0.75)"/>
+  <g clip-path="url(#wave-clip)">
+    <path class="w1" fill="rgba(255,255,255,0.07)" d="M350,90 C370,75 390,105 410,90 C430,75 450,105 468,90 L468,120 L350,120 Z"/>
+    <path class="w2" fill="rgba(255,255,255,0.05)" d="M350,95 C365,82 385,108 410,95 C435,82 455,108 468,95 L468,120 L350,120 Z"/>
+    <path class="w3" fill="rgba(255,255,255,0.09)" d="M350,100 C370,90 395,110 420,100 C445,90 458,108 468,100 L468,120 L350,120 Z"/>
   </g>
 </svg>'''
