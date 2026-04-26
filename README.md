@@ -2,7 +2,7 @@
 Показывайте сейчас играющую музыку на ВКонтакте прямо в README профиля!
 <!-- vkmusic-start -->
 
-![Now Playing](./music-card.svg?v=1777226486)
+![Now Playing](./music-card.svg?v=1777227451)
 
 <!-- vkmusic-end -->
 
