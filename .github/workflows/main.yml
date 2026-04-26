@@ -26,6 +26,17 @@ jobs:
           r = requests.get('https://api.vk.com/method/status.get', params={'access_token': t, 'v': '5.131'})
           print(json.dumps(r.json(), ensure_ascii=False, indent=2))
           "
+      - name: Debug token
+        env:
+          VK_TOKEN: ${{ secrets.VK_TOKEN }}
+        run: |
+          python3 -c "
+          import os
+          t = os.environ['VK_TOKEN']
+          print(f'Length: {len(t)}')
+          print(f'Starts: {t[:10]}')
+          print(f'Ends: {t[-5:]}')
+          "
       - name: Run script
         env:
           VK_TOKEN: ${{ secrets.VK_TOKEN }}
