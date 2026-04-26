@@ -6,32 +6,23 @@ TOKEN = os.environ['VK_TOKEN']
 def get_vk_music():
     try:
         url = "https://api.vk.com/method/status.get"
-        params = {
-            "access_token": TOKEN,
-            "v": "5.131"
-        }
+        params = {"access_token": TOKEN, "v": "5.131"}
         data = requests.get(url, params=params).json()
 
         if "error" in data:
-            print(f"VK API Error: {data['error']}")
+            print(f"VK Error: {data['error']}")
             return "Сейчас ничего не играет"
 
-        if "response" in data:
-            audio = data["response"].get("audio")
-            if audio:
-                artist = audio.get("artist", "")
-                title = audio.get("title", "")
-                return f"🎵 {artist} — {title}"
-            
-            text = data["response"].get("text", "")
-            if text:
-                return f"🎵 {text}"
+        text = data.get("response", {}).get("text", "")
+        print(f"Status text: '{text}'")
 
+        if text:
+            return f"🎵 {text}"
         return "Сейчас ничего не играет"
 
     except Exception as e:
         print(f"Exception: {e}")
-        return "Ошибка получения музыки"
+        return "Ошибка"
 
 def update_readme(new_status):
     with open("README.md", "r", encoding="utf-8") as f:
