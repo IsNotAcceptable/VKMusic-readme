@@ -1,3 +1,6 @@
+import time
+
+
 def update_readme(svg_path='./music-card.svg'):
     with open('README.md', 'r', encoding='utf-8') as f:
         content = f.read()
@@ -11,7 +14,8 @@ def update_readme(svg_path='./music-card.svg'):
         print('Теги не найдены в README.md!')
         return
 
-    badge = f'![Now Playing]({svg_path})'
+    ts = int(time.time())
+    badge = f'![Now Playing]({svg_path}?v={ts})'
     new_content = (
         content[:start_idx + len(start_tag)]
         + f'\n\n{badge}\n\n'
