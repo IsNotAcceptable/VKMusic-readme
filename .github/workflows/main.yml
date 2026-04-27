@@ -3,11 +3,6 @@ name: Update VK Music
 on:
   schedule:
     - cron: '*/5 * * * *'
-  workflow_dispatch:
-  push:
-    branches:
-      - master
-      - main
 
 jobs:
   build:
