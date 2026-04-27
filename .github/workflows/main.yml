@@ -1,6 +1,7 @@
 name: Update VK Music
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/5 * * * *'
 
