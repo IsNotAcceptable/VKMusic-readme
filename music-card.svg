@@ -36,8 +36,8 @@
   <rect x="12" y="12" width="96" height="96" rx="8" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
   <text x="124" y="36" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.45)" font-weight="600" letter-spacing="1.5">СЕЙЧАС ИГРАЕТ</text>
-  <text x="124" y="60" font-family="Arial,sans-serif" font-size="17" fill="white" font-weight="700">Фокусник</text>
-  <text x="124" y="80" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)">Король и Шут</text>
+  <text x="124" y="60" font-family="Arial,sans-serif" font-size="17" fill="white" font-weight="700">Ничего не играет</text>
+  <text x="124" y="80" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)"></text>
 
   <rect x="124" y="96" width="220" height="3" rx="2" fill="rgba(255,255,255,0.1)"/>
   <rect x="124" y="96" width="90" height="3" rx="2" fill="#1e0a3c" opacity="0.8"/>
