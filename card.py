@@ -5,7 +5,7 @@ def truncate(text, max_chars):
     return text if len(text) <= max_chars else text[:max_chars - 1] + '…'
 
 
-def generate_svg(artist, title, cover_url):
+def generate_svg(artist, title, cover_url, is_now_playing=True):
     colors = get_dominant_colors(cover_url) if cover_url else FALLBACK_COLORS
 
     c1 = darken(colors[0], 0.35)
@@ -23,14 +23,11 @@ def generate_svg(artist, title, cover_url):
     else:
         cover_block = f'<rect x="12" y="12" width="96" height="96" rx="8" fill="{hex_accent}" opacity="0.5"/><text x="60" y="66" text-anchor="middle" font-size="36" font-family="Arial">♫</text>'
 
-    if title:
-        title_safe = truncate(title, 28)
-        artist_safe = truncate(artist, 32) if artist else ''
-        label = 'СЕЙЧАС ИГРАЕТ'
-    else:
-        title_safe = truncate(title, 28) if title else 'Ничего не играет'
-        artist_safe = truncate(artist, 32) if artist else ''
-        label = 'ПОСЛЕДНЯЯ ПРОСЛУШАННАЯ' if title_safe != 'Ничего не играет' else 'СЕЙЧАС ИГРАЕТ'
+    title_safe = truncate(title, 28) if title else 'Ничего не играет'
+    artist_safe = truncate(artist, 32) if artist else ''
+    
+    # Определяем надпись в зависимости от статуса
+    label = 'СЕЙЧАС ИГРАЕТ' if is_now_playing else 'ПОСЛЕДНЯЯ ПРОСЛУШАННАЯ'
 
     return f'''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="480" height="120">
   <defs>
@@ -69,7 +66,7 @@ def generate_svg(artist, title, cover_url):
   {cover_block}
   <rect x="12" y="12" width="96" height="96" rx="8" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
-  <text x="124" y="36" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.45)" font-weight="600" letter-spacing="1.5">СЕЙЧАС ИГРАЕТ</text>
+  <text x="124" y="36" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.45)" font-weight="600" letter-spacing="1.5">{label}</text>
   <text x="124" y="60" font-family="Arial,sans-serif" font-size="17" fill="white" font-weight="700">{title_safe}</text>
   <text x="124" y="80" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)">{artist_safe}</text>
 
