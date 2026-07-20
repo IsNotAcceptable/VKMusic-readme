@@ -32,12 +32,12 @@
     <g class="wb"><path fill="rgba(255,255,255,0.04)" d="M0,102 C80,90 160,114 240,102 C320,90 400,114 480,102 C560,90 640,114 720,102 L720,120 L0,120 Z"/></g>
   </g>
 
-  <rect x="12" y="12" width="96" height="96" rx="8" fill="#1e0a3c" opacity="0.5"/><text x="60" y="66" text-anchor="middle" font-size="36" font-family="Arial">♫</text>
+  <image href="data:text/html; charset=UTF-8;base64," x="12" y="12" width="96" height="96" clip-path="url(#cover-clip)" preserveAspectRatio="xMidYMid slice"/>
   <rect x="12" y="12" width="96" height="96" rx="8" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
   <text x="124" y="36" font-family="Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.45)" font-weight="600" letter-spacing="1.5">СЕЙЧАС ИГРАЕТ</text>
-  <text x="124" y="60" font-family="Arial,sans-serif" font-size="17" fill="white" font-weight="700">Ничего не играет</text>
-  <text x="124" y="80" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)"></text>
+  <text x="124" y="60" font-family="Arial,sans-serif" font-size="17" fill="white" font-weight="700">Кто все эти люди?</text>
+  <text x="124" y="80" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)">Порнофильмы</text>
 
   <rect x="124" y="96" width="220" height="3" rx="2" fill="rgba(255,255,255,0.1)"/>
   <rect x="124" y="96" width="90" height="3" rx="2" fill="#1e0a3c" opacity="0.8"/>
