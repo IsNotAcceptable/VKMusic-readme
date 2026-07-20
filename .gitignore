@@ -37,6 +37,3 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
-
-# Json
-last_track.json
