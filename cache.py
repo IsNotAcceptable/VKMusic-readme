@@ -5,6 +5,7 @@ from datetime import datetime
 CACHE_FILE = 'last_track.json'
 
 def save_last_track(artist, title, cover_url):
+    """Сохраняет последний проигранный трек"""
     data = {
         'artist': artist,
         'title': title,
@@ -15,6 +16,7 @@ def save_last_track(artist, title, cover_url):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def get_last_track():
+    """Получает последний сохранённый трек"""
     if not os.path.exists(CACHE_FILE):
         return None, None, None
     

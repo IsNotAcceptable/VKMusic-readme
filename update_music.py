@@ -10,6 +10,7 @@ if __name__ == '__main__':
     
     is_now_playing = bool(artist and title)
     
+    # Если музыка не играет, берём последний трек из кеша
     if not is_now_playing:
         artist, title, _ = get_last_track()
         print(f'Используем последний трек: {artist} — {title}')
@@ -18,6 +19,7 @@ if __name__ == '__main__':
     if artist and title:
         cover_url = get_cover_url(artist, title)
         print(f'Обложка: {cover_url}')
+        # Сохраняем только если получили текущий трек
         if is_now_playing:
             save_last_track(artist, title, cover_url)
 
