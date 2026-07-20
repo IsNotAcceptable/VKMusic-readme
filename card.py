@@ -23,8 +23,14 @@ def generate_svg(artist, title, cover_url):
     else:
         cover_block = f'<rect x="12" y="12" width="96" height="96" rx="8" fill="{hex_accent}" opacity="0.5"/><text x="60" y="66" text-anchor="middle" font-size="36" font-family="Arial">♫</text>'
 
-    title_safe = truncate(title, 28) if title else 'Ничего не играет'
-    artist_safe = truncate(artist, 32) if artist else ''
+    if title:
+        title_safe = truncate(title, 28)
+        artist_safe = truncate(artist, 32) if artist else ''
+        label = 'СЕЙЧАС ИГРАЕТ'
+    else:
+        title_safe = truncate(title, 28) if title else 'Ничего не играет'
+        artist_safe = truncate(artist, 32) if artist else ''
+        label = 'ПОСЛЕДНЯЯ ПРОСЛУШАННАЯ' if title_safe != 'Ничего не играет' else 'СЕЙЧАС ИГРАЕТ'
 
     return f'''<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="480" height="120">
   <defs>
