@@ -6,7 +6,7 @@
 [![Badge](https://img.shields.io/github/stars/IsNotACceptable/VKMusic-readme?style=for-the-badge)](https://github.com/IsNotAcceptable/VKMusic-readme/stargazers)
 <!-- vkmusic-start -->
 
-![Now Playing](./music-card.svg?v=1784700782)
+![Now Playing](./music-card.svg?v=1784709827)
 
 <!-- vkmusic-end -->
 
