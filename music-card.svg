@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="480" height="120">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#131112"/>
-      <stop offset="100%" stop-color="#2f2f2f"/>
+      <stop offset="0%" stop-color="#0a0315"/>
+      <stop offset="100%" stop-color="#0f0519"/>
     </linearGradient>
     <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#383336" stop-opacity="0.45"/>
-      <stop offset="60%" stop-color="#383336" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#1e0a3c" stop-opacity="0.45"/>
+      <stop offset="60%" stop-color="#1e0a3c" stop-opacity="0"/>
     </linearGradient>
     <clipPath id="cover-clip">
       <rect x="12" y="12" width="96" height="96" rx="8"/>
@@ -40,7 +40,7 @@
   <text x="124" y="80" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)">PAIN</text>
 
   <rect x="124" y="96" width="220" height="3" rx="2" fill="rgba(255,255,255,0.1)"/>
-  <rect x="124" y="96" width="90" height="3" rx="2" fill="#383336" opacity="0.8"/>
+  <rect x="124" y="96" width="90" height="3" rx="2" fill="#1e0a3c" opacity="0.8"/>
 
   <circle class="ring" cx="415" cy="60" r="28" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
   <circle cx="415" cy="60" r="22" fill="rgba(255,255,255,0.12)"/>
